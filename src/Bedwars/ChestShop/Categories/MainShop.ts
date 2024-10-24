@@ -10,6 +10,7 @@ import {
 import { buyPickaxe, getPickaxe, getPickaxePrice } from "Bedwars/PickaxeLevels";
 import { buyAxe, getAxe, getAxePrice } from "Bedwars/AxeLevels";
 import { buyArmor, getArmor, getArmorPrice } from "Bedwars/ArmorLevels";
+import { knockbackWhip } from "Bedwars/CustomItems/KnockbackWhip";
 
 const items: Array<ShopItem> = new Array<ShopItem>(27);
 
@@ -280,6 +281,17 @@ items[24] = addPriceToItem(
     return {
       priceAmount: 3,
       priceTypeId: "minecraft:diamond",
+    };
+  },
+  buyItem
+);
+
+items[25] = addPriceToItem(
+  () => knockbackWhip,
+  () => {
+    return {
+      priceAmount: 5,
+      priceTypeId: "minecraft:iron_ingot",
     };
   },
   buyItem

@@ -5,6 +5,7 @@ import { getColoredTerracotta, getColoredGlass, getColoredWool, } from "../Color
 import { buyPickaxe, getPickaxe, getPickaxePrice } from "Bedwars/PickaxeLevels";
 import { buyAxe, getAxe, getAxePrice } from "Bedwars/AxeLevels";
 import { buyArmor, getArmor, getArmorPrice } from "Bedwars/ArmorLevels";
+import { knockbackWhip } from "Bedwars/CustomItems/KnockbackWhip";
 const items = new Array(27);
 const stoneSword = new ItemStack("minecraft:stone_sword");
 stoneSword.nameTag = "§r§7Stone Sword";
@@ -166,6 +167,12 @@ items[24] = addPriceToItem((any) => enemyTracker, (any) => {
     return {
         priceAmount: 3,
         priceTypeId: "minecraft:diamond",
+    };
+}, buyItem);
+items[25] = addPriceToItem(() => knockbackWhip, () => {
+    return {
+        priceAmount: 5,
+        priceTypeId: "minecraft:iron_ingot",
     };
 }, buyItem);
 const ladder = new ItemStack("minecraft:ladder");
