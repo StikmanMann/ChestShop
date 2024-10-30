@@ -8,9 +8,18 @@ import {
   getColoredWool,
 } from "../ColoredBlocks";
 import { buyPickaxe, getPickaxe, getPickaxePrice } from "Bedwars/PickaxeLevels";
-import { buyAxe, getAxe, getAxePrice } from "Bedwars/AxeLevels";
-import { buyArmor, getArmor, getArmorPrice } from "Bedwars/ArmorLevels";
+import {
+  buyAxe,
+  getAxe,
+  getAxePrice,
+} from "Bedwars/ChestShop/LevelableItems/AxeLevels";
+import {
+  buyArmor,
+  getArmor,
+  getArmorPrice,
+} from "Bedwars/ChestShop/LevelableItems/ArmorLevels";
 import { knockbackWhip } from "Bedwars/CustomItems/KnockbackWhip";
+import { buyShears, getShears } from "../LevelableItems/ShearLevel";
 
 const items: Array<ShopItem> = new Array<ShopItem>(27);
 
@@ -220,6 +229,17 @@ items[18] = addPriceToItem(
   buySword
 );
 
+items[19] = addPriceToItem(
+  getShears,
+  () => {
+    return {
+      priceAmount: 20,
+      priceTypeId: "minecraft:copper_ingot",
+    };
+  },
+
+  buyShears
+);
 const deepslate = new ItemStack("minecraft:deepslate");
 deepslate.nameTag = "§r§fDeepslate";
 deepslate.amount = 12;

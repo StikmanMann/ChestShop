@@ -1,5 +1,6 @@
 import { system, world, } from "@minecraft/server";
 import { Logger } from "staticScripts/Logger";
+import { categories } from "./Categories/Catergorie";
 import { VectorFunctions } from "staticScripts/vectorFunctions";
 import { TickFunctions } from "staticScripts/tickFunctions";
 import { GlobalVars } from "globalVars";
@@ -28,7 +29,7 @@ world.beforeEvents.playerInteractWithEntity.subscribe((event) => {
             return;
         }
         const shopInventory = shopEntity.getComponent("minecraft:inventory").container;
-        loadPage(shopInventory, mainShop, event.player);
+        loadPage(shopInventory, categories.get(shopEntity.nameTag), event.player);
         const newShop = shopEntity.dimension.spawnEntity(shopEntity.typeId, shopEntity.location);
         newShop.nameTag = shopEntity.nameTag;
         newShop.addEffect("instant_health", 99999, {

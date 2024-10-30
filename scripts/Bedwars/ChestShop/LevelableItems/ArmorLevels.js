@@ -1,6 +1,6 @@
 import { EquipmentSlot, ItemStack } from "@minecraft/server";
 import { addCommand } from "staticScripts/commandFunctions";
-import { checkForPrice } from "./ChestShop/BuyFunctions/StandardBuyFunction";
+import { checkForPrice } from "../BuyFunctions/StandardBuyFunction";
 const chainmailHelmet = new ItemStack("minecraft:chainmail_helmet");
 const chainmailChestplate = new ItemStack("minecraft:chainmail_chestplate");
 const shopChainChestplate = new ItemStack("minecraft:chainmail_chestplate");
@@ -43,7 +43,7 @@ const shopArmorLevel = [
     shopDiamondChestplate,
 ];
 export const armorLevels = [
-    { chestplate: null, helmet: null },
+    { chestplate: () => null, helmet: () => null },
     chainArmor,
     ironArmor,
     diamondArmor,

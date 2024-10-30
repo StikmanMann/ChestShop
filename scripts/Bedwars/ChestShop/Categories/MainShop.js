@@ -3,9 +3,10 @@ import { addPriceToItem, buyItem } from "../BuyFunctions/StandardBuyFunction";
 import { buySword } from "../BuyFunctions/SwordBuyFunctions";
 import { getColoredTerracotta, getColoredGlass, getColoredWool, } from "../ColoredBlocks";
 import { buyPickaxe, getPickaxe, getPickaxePrice } from "Bedwars/PickaxeLevels";
-import { buyAxe, getAxe, getAxePrice } from "Bedwars/AxeLevels";
-import { buyArmor, getArmor, getArmorPrice } from "Bedwars/ArmorLevels";
+import { buyAxe, getAxe, getAxePrice, } from "Bedwars/ChestShop/LevelableItems/AxeLevels";
+import { buyArmor, getArmor, getArmorPrice, } from "Bedwars/ChestShop/LevelableItems/ArmorLevels";
 import { knockbackWhip } from "Bedwars/CustomItems/KnockbackWhip";
+import { buyShears, getShears } from "../LevelableItems/ShearLevel";
 const items = new Array(27);
 const stoneSword = new ItemStack("minecraft:stone_sword");
 stoneSword.nameTag = "§r§7Stone Sword";
@@ -129,6 +130,12 @@ items[18] = addPriceToItem((any) => diamondSword, (any) => {
         priceTypeId: "minecraft:diamond",
     };
 }, buySword);
+items[19] = addPriceToItem(getShears, () => {
+    return {
+        priceAmount: 20,
+        priceTypeId: "minecraft:copper_ingot",
+    };
+}, buyShears);
 const deepslate = new ItemStack("minecraft:deepslate");
 deepslate.nameTag = "§r§fDeepslate";
 deepslate.amount = 12;

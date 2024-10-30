@@ -8,7 +8,7 @@ import {
 } from "@minecraft/server";
 import { showHUD } from "staticScripts/commandFunctions";
 import { Logger } from "staticScripts/Logger";
-import { Category } from "./Categories/Catergorie";
+import { categories, Category } from "./Categories/Catergorie";
 import { VectorFunctions } from "staticScripts/vectorFunctions";
 import { TickFunctions } from "staticScripts/tickFunctions";
 import { GlobalVars } from "globalVars";
@@ -43,7 +43,7 @@ world.beforeEvents.playerInteractWithEntity.subscribe((event) => {
     const shopInventory = shopEntity.getComponent(
       "minecraft:inventory"
     ).container;
-    loadPage(shopInventory, mainShop, event.player);
+    loadPage(shopInventory, categories.get(shopEntity.nameTag), event.player);
 
     const newShop = shopEntity.dimension.spawnEntity(
       shopEntity.typeId,

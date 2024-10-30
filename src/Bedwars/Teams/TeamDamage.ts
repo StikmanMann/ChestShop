@@ -1,3 +1,3 @@
 import { world } from "@minecraft/server";
 
-world.afterEvents.entityHurt.subscribe((eventData) => {});
+world.afterEvents.entityDie.subscribe((eventData) => {});

@@ -1,8 +1,8 @@
 import { Player, world } from "@minecraft/server";
 import { givePlayerKit } from "./Kit";
 import { pickaxeLevels } from "./PickaxeLevels";
-import { axeLevels } from "./AxeLevels";
-import { armorLevels } from "./ArmorLevels";
+import { axeLevels } from "Bedwars/ChestShop/LevelableItems/AxeLevels";
+import { armorLevels } from "./ChestShop/LevelableItems/ArmorLevels";
 // Define properties on hypixelValues object
 //#region Functions
 Player.prototype.givePlayerKit = function () {
@@ -16,6 +16,10 @@ Player.prototype.getPickaxeLevel = function () {
 };
 Player.prototype.setPickaxeLevel = function (level) {
     world.sendMessage("Setting pickaxe level to " + level);
+    if (level < 0) {
+        world.sendMessage("Pickaxe level cannot be negative");
+        return;
+    }
     if (level > pickaxeLevels.length - 1) {
         world.sendMessage("Max pickaxe level reached");
         return;
@@ -30,6 +34,10 @@ Player.prototype.getAxeLevel = function () {
 };
 Player.prototype.setAxeLevel = function (level) {
     world.sendMessage("Setting axe level to " + level);
+    if (level < 0) {
+        world.sendMessage("Axe level cannot be negative");
+        return;
+    }
     if (level > axeLevels.length - 1) {
         world.sendMessage("Max axe level reached");
         return;
@@ -38,6 +46,10 @@ Player.prototype.setAxeLevel = function (level) {
 };
 Player.prototype.setArmorLevel = function (level) {
     world.sendMessage("Setting armor level to " + level);
+    if (level < 0) {
+        world.sendMessage("Armor level cannot be negative");
+        return;
+    }
     if (level > armorLevels.length - 1) {
         world.sendMessage("Max armor level reached");
         return;
@@ -49,5 +61,15 @@ Player.prototype.getArmorLevel = function () {
         this.setDynamicProperty("armorLevel", 0);
     }
     return this.getDynamicProperty("armorLevel");
+};
+Player.prototype.getShearsStautus = function () {
+    if (this.getDynamicProperty("shearsStatus") === undefined) {
+        this.setDynamicProperty("shearsStatus", 0);
+    }
+    return this.getDynamicProperty("shearsStatus");
+};
+Player.prototype.setShearsStauts = function (status) {
+    let num = Math.min(Math.max(status, 0), 1);
+    this.setDynamicProperty("shearsStatus", num);
 };
 //#endregion

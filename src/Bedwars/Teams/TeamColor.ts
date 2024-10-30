@@ -1,5 +1,7 @@
-import { Player, system, world } from "@minecraft/server";
+import { DisplaySlotId, Player, system, world } from "@minecraft/server";
+import { GlobalVars } from "globalVars";
 import { addCommand } from "staticScripts/commandFunctions";
+import { TickFunctions } from "staticScripts/tickFunctions";
 
 type TeamColorType = {
   red: string;
@@ -54,16 +56,23 @@ system.run(() => {
 export class BedwarsTeam {
   static setPlayerColor(player: Player, color: keyof TeamColorType) {
     player.setDynamicProperty("color", color);
+    this.setPlayerNameTag(player);
+  }
+
+  static setPlayerNameTag(player: Player) {
+    const color = player.getDynamicProperty("color") as string;
     let name = player.nameTag;
     if (name.includes("§")) {
       let index = name.indexOf("§", 2);
+      if (index > 5) {
+        return;
+      }
       name = name.slice(index + 2);
     }
     const newName = `§l${teamColorNames.get(color)}${name}`;
     player.nameTag = newName;
     world.sendMessage("New Name: " + newName);
   }
-
   static getBlockColor(player: Player): string {
     const color = player.getDynamicProperty("color") as string;
 
@@ -78,6 +87,10 @@ export class BedwarsTeam {
     return validColors.includes(color as keyof TeamColorType);
   }
 }
+
+world.afterEvents.playerSpawn.subscribe((eventData) => {
+  BedwarsTeam.setPlayerNameTag(eventData.player);
+});
 
 addCommand({
   commandName: "setTeamColor",
@@ -101,3 +114,28 @@ addCommand({
     }
   },
 });
+
+const healthUnderName = () => {
+  system.run(() => {
+    let scoreboard = world.scoreboard.getObjective("health");
+    if (!scoreboard) {
+      scoreboard = world.scoreboard.addObjective("health", "");
+    }
+    world.scoreboard.setObjectiveAtDisplaySlot(DisplaySlotId.BelowName, {
+      objective: scoreboard,
+    });
+    for (const player of GlobalVars.players) {
+      const health = player.getComponent("health");
+      scoreboard.setScore(player, health.currentValue);
+      /* onst nameTag = player.nameTag;
+      if (nameTag.includes("\n")) {
+        let slicedName = nameTag.slice(0, nameTag.indexOf("\n"));
+        player.nameTag = slicedName + "\n" + health.currentValue;
+      } else {
+        player.nameTag = nameTag + "\n" + health.currentValue;
+      } */
+    }
+  });
+};
+
+TickFunctions.addFunction(healthUnderName, 1);

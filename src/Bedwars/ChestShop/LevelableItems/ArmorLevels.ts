@@ -1,11 +1,11 @@
 import { Entity, EquipmentSlot, ItemStack, Player } from "@minecraft/server";
-import { Price } from "./ChestShop/Categories/Catergorie";
+import { Price } from "../Categories/Catergorie";
 import { addCommand } from "staticScripts/commandFunctions";
-import { checkForPrice } from "./ChestShop/BuyFunctions/StandardBuyFunction";
+import { checkForPrice } from "../BuyFunctions/StandardBuyFunction";
 
 interface ArmorLevel {
-  helmet: ItemStack;
-  chestplate: ItemStack;
+  helmet: () => ItemStack;
+  chestplate: () => ItemStack;
 }
 
 const chainmailHelmet = new ItemStack("minecraft:chainmail_helmet");
@@ -16,8 +16,8 @@ shopChainChestplate.setLore(
 );
 
 const chainArmor: ArmorLevel = {
-  helmet: chainmailHelmet,
-  chestplate: chainmailChestplate,
+  helmet: () => chainmailHelmet,
+  chestplate: () => chainmailChestplate,
 };
 
 const ironHelmet = new ItemStack("minecraft:iron_helmet");
@@ -28,8 +28,8 @@ shopIronChestplate.setLore(
 );
 
 const ironArmor: ArmorLevel = {
-  helmet: ironHelmet,
-  chestplate: ironChestplate,
+  helmet: () => ironHelmet,
+  chestplate: () => ironChestplate,
 };
 
 const diamondHelmet = new ItemStack("minecraft:diamond_helmet");
@@ -40,8 +40,8 @@ shopDiamondChestplate.setLore(
 );
 
 const diamondArmor: ArmorLevel = {
-  helmet: diamondHelmet,
-  chestplate: diamondChestplate,
+  helmet: () => diamondHelmet,
+  chestplate: () => diamondChestplate,
 };
 
 const armorShopItems: ItemStack[] = [
@@ -65,7 +65,7 @@ const shopArmorLevel = [
 ];
 
 export const armorLevels: ArmorLevel[] = [
-  { chestplate: null, helmet: null },
+  { chestplate: () => null, helmet: () => null },
   chainArmor,
   ironArmor,
   diamondArmor,
@@ -126,9 +126,9 @@ export const buyArmor = (
   const armor = armorLevels[level];
   const equipment = buyer.getComponent("minecraft:equippable");
   if (armor.helmet != null) {
-    equipment.setEquipment(EquipmentSlot.Head, armor.helmet);
+    equipment.setEquipment(EquipmentSlot.Head, armor.helmet());
   }
   if (armor.chestplate != null) {
-    equipment.setEquipment(EquipmentSlot.Chest, armor.chestplate);
+    equipment.setEquipment(EquipmentSlot.Chest, armor.chestplate());
   }
 };

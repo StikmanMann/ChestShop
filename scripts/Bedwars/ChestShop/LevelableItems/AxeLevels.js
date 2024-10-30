@@ -1,5 +1,5 @@
 import { EnchantmentType, ItemStack, world, } from "@minecraft/server";
-import { buyItem, checkForPrice, } from "./ChestShop/BuyFunctions/StandardBuyFunction";
+import { buyItem, checkForPrice, } from "Bedwars/ChestShop/BuyFunctions/StandardBuyFunction";
 import { addCommand } from "staticScripts/commandFunctions";
 const efficiencyEnchantment = new EnchantmentType("minecraft:efficiency");
 const sharpnessEnchantment = new EnchantmentType("minecraft:sharpness");

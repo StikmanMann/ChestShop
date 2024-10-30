@@ -11,9 +11,8 @@ import {
   addPriceToItem,
   buyItem,
   checkForPrice,
-} from "./ChestShop/BuyFunctions/StandardBuyFunction";
-import { Price, ShopItem } from "./ChestShop/Categories/Catergorie";
-import { workerData } from "worker_threads";
+} from "Bedwars/ChestShop/BuyFunctions/StandardBuyFunction";
+import { Price, ShopItem } from "Bedwars/ChestShop/Categories/Catergorie";
 import { addCommand } from "staticScripts/commandFunctions";
 
 const efficiencyEnchantment = new EnchantmentType("minecraft:efficiency");
@@ -151,4 +150,15 @@ addCommand({
     world.sendMessage("AGSAGHF");
     chatSendEvent.sender.setPickaxeLevel(level);
   },
+});
+
+world.afterEvents.entityDie.subscribe((eventData) => {
+  if (eventData.deadEntity.typeId == "minecraft:player") {
+    const player = eventData.deadEntity as Player;
+    const level = player.getPickaxeLevel();
+    if (level <= 1) {
+      return;
+    }
+    player.setPickaxeLevel(level - 1);
+  }
 });

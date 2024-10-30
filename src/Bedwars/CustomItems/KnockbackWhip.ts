@@ -18,6 +18,16 @@ world.afterEvents.entityHurt.subscribe((eventData) => {
     .getEquipmentSlot(EquipmentSlot.Mainhand);
 
   if (item.typeId == knockbackWhip.typeId) {
-    world.sendMessage("Knockback whip hit");
+    const attacker = eventData.damageSource.damagingEntity;
+    const damagedEntity = eventData.hurtEntity;
+    const playerRotation = attacker.getRotation();
+    const kbForce = 1 + Math.random();
+    damagedEntity.applyKnockback(
+      Math.sin(playerRotation.y * (Math.PI / 180) * -1),
+      Math.cos(playerRotation.y * (Math.PI / 180) * -1),
+      kbForce,
+      0.1
+    );
+    world.sendMessage("KB Force: " + kbForce.toFixed(2));
   }
 });

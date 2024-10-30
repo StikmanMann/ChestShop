@@ -1,23 +1,27 @@
-import { world } from "@minecraft/server";
-import { ECosmeticType, cosmeticList, getCosmeticById } from "./cosmeticList";
+import { world, } from "@minecraft/server";
+import { ECosmeticType, cosmeticList, getCosmeticById, } from "./cosmeticList";
 import { TickFunctions } from "staticScripts/tickFunctions";
 import { JumpFunctions } from "playerMovement/jumpFunctions";
 import { GlobalVars } from "globalVars";
 import { addCommand, showHUD } from "staticScripts/commandFunctions";
 import { ActionFormData } from "@minecraft/server-ui";
-import "../hypixelFunctions/playerFunctions";
+import "../ServerFunctions/playerFunctions";
 import { askForConfirmation } from "hud";
 import { LinkedList } from "dataTypes/linkedList";
 import { Logger } from "staticScripts/Logger";
-const EnumKeys = Object.keys(ECosmeticType).filter(key => isNaN(Number(key)));
+const EnumKeys = Object.keys(ECosmeticType).filter((key) => isNaN(Number(key)));
 class PlayerCosmetic {
     constructor(player) {
         this.cosmetic = new Array(EnumKeys.length);
         this.tick = (player) => {
-            this.cosmetic[ECosmeticType.NormalParticle].cosmeticFunction({ player: player });
+            this.cosmetic[ECosmeticType.NormalParticle].cosmeticFunction({
+                player: player,
+            });
         };
         this.jumpParticle = (player) => {
-            this.cosmetic[ECosmeticType.JumpParticle].cosmeticFunction({ player: player });
+            this.cosmetic[ECosmeticType.JumpParticle].cosmeticFunction({
+                player: player,
+            });
         };
         this.cosmeticTypeHud = () => {
             const cosmeticTypeHud = new ActionFormData();
@@ -26,9 +30,12 @@ class PlayerCosmetic {
             for (const key of EnumKeys) {
                 cosmeticTypeHud.button(key);
             }
-            showHUD(this.player, cosmeticTypeHud).then((response) => { if (response.canceled) {
-                return;
-            } ; this.showCosmeticHud(response.selection); });
+            showHUD(this.player, cosmeticTypeHud).then((response) => {
+                if (response.canceled) {
+                    return;
+                }
+                this.showCosmeticHud(response.selection);
+            });
         };
         this.showCosmeticHud = (type) => {
             const cosmeticHud = new ActionFormData();
@@ -83,7 +90,6 @@ class PlayerCosmetic {
             if (this.cosmetic[cosmeticType].cosmeticId == cosmeticId) {
                 this.setCosmetic("empty", cosmeticType);
             }
-            ;
         };
         this.unlockAllCosmetics = () => {
             Logger.log(`Unlocked all cosmetics for ${this.player.name}`, "Cosmetics");
@@ -130,20 +136,26 @@ class PlayerCosmetic {
                 if (response.canceled) {
                     return;
                 }
-                if (buyableCosmetics.getNodebyIndex(response.selection).data.cost > this.player.getHypixelValue("winsCurrency")) {
+                if (buyableCosmetics.getNodebyIndex(response.selection).data.cost >
+                    this.player.getHypixelValue("winsCurrency")) {
                     this.player.sendMessage("You don't have enough gold!");
                     return;
                 }
                 else {
                     askForConfirmation(this.player, `Are you sure you want to buy ${buyableCosmetics.getNodebyIndex(response.selection).data.cosmeticId}?`).then((res) => {
                         if (res) {
-                            this.unlockCosmetic(buyableCosmetics.getNodebyIndex(response.selection).data.cosmeticId);
-                            this.player.setHypixelValue("winsCurrency", this.player.getHypixelValue("winsCurrency") - buyableCosmetics.getNodebyIndex(response.selection).data.cost);
-                            console.log(`Purchased ${buyableCosmetics.getNodebyIndex(response.selection).data.cosmeticId} for ${buyableCosmetics.getNodebyIndex(response.selection).data.cost} by ${this.player.name}`);
+                            this.unlockCosmetic(buyableCosmetics.getNodebyIndex(response.selection).data
+                                .cosmeticId);
+                            this.player.setHypixelValue("winsCurrency", this.player.getHypixelValue("winsCurrency") -
+                                buyableCosmetics.getNodebyIndex(response.selection).data.cost);
+                            console.log(`Purchased ${buyableCosmetics.getNodebyIndex(response.selection).data
+                                .cosmeticId} for ${buyableCosmetics.getNodebyIndex(response.selection).data.cost} by ${this.player.name}`);
                         }
                         askForConfirmation(this.player, "Do you want to equip this cosmetic?").then((res2) => {
                             if (res2) {
-                                this.setCosmetic(buyableCosmetics.getNodebyIndex(response.selection).data.cosmeticId, buyableCosmetics.getNodebyIndex(response.selection).data.cosmeticType);
+                                this.setCosmetic(buyableCosmetics.getNodebyIndex(response.selection).data
+                                    .cosmeticId, buyableCosmetics.getNodebyIndex(response.selection).data
+                                    .cosmeticType);
                             }
                         });
                     });
@@ -158,11 +170,25 @@ class PlayerCosmetic {
         }
         //This is only debug prop should remove this also idk waht happens if nothing is defined
         TickFunctions.addFunction(() => this.tick(this.player), 1);
-        JumpFunctions.addPressedJumpFunction(player => this.jumpParticle(player));
+        JumpFunctions.addPressedJumpFunction((player) => this.jumpParticle(player));
     }
 }
-addCommand({ commandName: "cosmetic", chatFunction: ((event) => { equipCosmetic(event); }), directory: "Cosmetics", commandPrefix: ";;" });
-addCommand({ commandName: "shop", chatFunction: ((event) => { playerCosmeticeMap.get(event.sender).cosmeticShop(); }), directory: "Cosmetics", commandPrefix: ";;" });
+addCommand({
+    commandName: "cosmetic",
+    chatFunction: (event) => {
+        equipCosmetic(event);
+    },
+    directory: "Cosmetics",
+    commandPrefix: ";;",
+});
+addCommand({
+    commandName: "shop",
+    chatFunction: (event) => {
+        playerCosmeticeMap.get(event.sender).cosmeticShop();
+    },
+    directory: "Cosmetics",
+    commandPrefix: ";;",
+});
 const equipCosmetic = (eventData) => {
     playerCosmeticeMap.get(eventData.sender).cosmeticTypeHud();
 };

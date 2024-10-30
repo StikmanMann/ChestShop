@@ -1,5 +1,5 @@
 import { EnchantmentType, ItemStack, world, } from "@minecraft/server";
-import { buyItem, checkForPrice, } from "./ChestShop/BuyFunctions/StandardBuyFunction";
+import { buyItem, checkForPrice, } from "Bedwars/ChestShop/BuyFunctions/StandardBuyFunction";
 import { addCommand } from "staticScripts/commandFunctions";
 const efficiencyEnchantment = new EnchantmentType("minecraft:efficiency");
 const sharpnessEnchantment = new EnchantmentType("minecraft:sharpness");
@@ -113,4 +113,14 @@ addCommand({
         world.sendMessage("AGSAGHF");
         chatSendEvent.sender.setPickaxeLevel(level);
     },
+});
+world.afterEvents.entityDie.subscribe((eventData) => {
+    if (eventData.deadEntity.typeId == "minecraft:player") {
+        const player = eventData.deadEntity;
+        const level = player.getPickaxeLevel();
+        if (level <= 1) {
+            return;
+        }
+        player.setPickaxeLevel(level - 1);
+    }
 });

@@ -6,13 +6,13 @@ import {
   Player,
   world,
 } from "@minecraft/server";
-import { UpgradableItem } from "./UpgradableItem";
+import { UpgradableItem } from "Bedwars/UpgradableItem";
 import {
   addPriceToItem,
   buyItem,
   checkForPrice,
-} from "./ChestShop/BuyFunctions/StandardBuyFunction";
-import { Price, ShopItem } from "./ChestShop/Categories/Catergorie";
+} from "Bedwars/ChestShop/BuyFunctions/StandardBuyFunction";
+import { Price, ShopItem } from "Bedwars/ChestShop/Categories/Catergorie";
 import { workerData } from "worker_threads";
 import { addCommand } from "staticScripts/commandFunctions";
 
@@ -151,4 +151,15 @@ addCommand({
     world.sendMessage("AGSAGHF");
     chatSendEvent.sender.setAxeLevel(level);
   },
+});
+
+world.afterEvents.entityDie.subscribe((eventData) => {
+  if (eventData.deadEntity.typeId == "minecraft:player") {
+    const player = eventData.deadEntity as Player;
+    const level = player.getAxeLevel();
+    if (level <= 1) {
+      return;
+    }
+    player.setAxeLevel(level - 1);
+  }
 });
