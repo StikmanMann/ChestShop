@@ -1,21 +1,28 @@
 import { system, world } from "@minecraft/server";
-import { testMap } from "./Bridge Maps/brideMaps";
 import { EGameMode, MapParser } from "./loadMap";
 import { Logger } from "staticScripts/Logger";
 import { AwaitFunctions } from "staticScripts/awaitFunctions";
+import { largeMap } from "./BedwarsMaps/BedwarsMaps";
 // mapDefinitions.ts
 export var EMapList;
 (function (EMapList) {
     EMapList[EMapList["TEST"] = 1] = "TEST";
+    EMapList[EMapList["LARGEMAP"] = 2] = "LARGEMAP";
     // Add more maps as needed
 })(EMapList || (EMapList = {}));
 export const mapList = [
+    /* {
+      mapId: 1,
+      mapName: "Test Map",
+      gameMode: EGameMode.BRIDGE,
+      mapData: testMap,
+    }, */
     {
-        mapId: 1,
-        mapName: "Test Map",
-        gameMode: EGameMode.BRIDGE,
-        mapData: testMap,
-    }
+        mapId: 2,
+        mapName: "Large Map",
+        gameMode: EGameMode.BEDWARS,
+        mapData: largeMap,
+    },
 ];
 const preloadMaps = async () => {
     for (const map of mapList) {
@@ -26,5 +33,5 @@ const preloadMaps = async () => {
 system.run(async () => {
     await preloadMaps();
     await AwaitFunctions.waitTicks(10);
-    MapParser.loadMap(testMap, { x: 100, y: 50, z: 100 }, world.getAllPlayers());
+    MapParser.loadMap(largeMap, { x: 1000, y: 50, z: 1000 }, world.getPlayers());
 });

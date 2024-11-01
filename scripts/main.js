@@ -1,13 +1,12 @@
-/**
 //Pre load
-    //Map Data
-    import "MapParser/Bridge Maps/brideMaps"
-
-    //Player Functions
-    import "hypixelFunctions/playerFunctions"
-    import "staticScripts/inventoryFunctions"
-    import "MapParser/mapList"
-    import "hypixelFunctions/playerSettings"
+//Map Data
+import "MapParser/Bridge Maps/brideMaps";
+//Player Functions
+import "hypixelFunctions/playerFunctions";
+import "ServerFunctions/playerSpawnHandler";
+import "MapParser/mapList";
+//import "hypixelFunctions/playerSettings";
+/**
 //Other
 import "gameCreator/lobbyManager"
 import "hypixelFunctions/partySystem"

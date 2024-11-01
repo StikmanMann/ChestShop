@@ -148,7 +148,7 @@ const checkShopsForBuy = () => {
       "minecraft:inventory"
     ).container;
 
-    const currentShop = mainShop;
+    const currentShop = categories.get(shopEntity.nameTag);
     for (let i = 0; i < shopEntityInventory.size; i++) {
       if (shopEntityInventory.getItem(i) !== undefined) {
         continue;

@@ -4,7 +4,6 @@ import { categories } from "./Categories/Catergorie";
 import { VectorFunctions } from "staticScripts/vectorFunctions";
 import { TickFunctions } from "staticScripts/tickFunctions";
 import { GlobalVars } from "globalVars";
-import { mainShop } from "./Categories/MainShop";
 /**
  * POSSIBLE OPTIMIZATIONS
  *
@@ -109,7 +108,7 @@ const checkShopsForBuy = () => {
             continue;
         }
         const shopEntityInventory = shopEntity.getComponent("minecraft:inventory").container;
-        const currentShop = mainShop;
+        const currentShop = categories.get(shopEntity.nameTag);
         for (let i = 0; i < shopEntityInventory.size; i++) {
             if (shopEntityInventory.getItem(i) !== undefined) {
                 continue;

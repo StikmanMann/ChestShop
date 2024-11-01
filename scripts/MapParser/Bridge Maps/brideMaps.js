@@ -22,7 +22,7 @@ export const testMap = {
         winsNeeded: 3,
         blockPlaceArea: {
             start: { x: 18, y: -1, z: 9 },
-            end: { x: 63, y: 18, z: 21 }
+            end: { x: 63, y: 18, z: 21 },
         },
         teams: [
             {
@@ -32,9 +32,19 @@ export const testMap = {
                 teamName: "§9BLUE",
                 players: [],
                 spawnPoints: [{ x: 10, y: 21, z: 15 }],
-                capturePoints: [{ startPosition: { x: 11, y: 8, z: 17 }, endPosition: { x: 7, y: 8, z: 13 } }],
+                capturePoints: [
+                    {
+                        startPosition: { x: 11, y: 8, z: 17 },
+                        endPosition: { x: 7, y: 8, z: 13 },
+                    },
+                ],
                 spawnBarrierBlockTypeID: "glass",
-                spawnBarriers: [{ startPosition: { x: 9, y: 20, z: 13 }, endPosition: { x: 11, y: 20, z: 17 } }]
+                spawnBarriers: [
+                    {
+                        startPosition: { x: 9, y: 20, z: 13 },
+                        endPosition: { x: 11, y: 20, z: 17 },
+                    },
+                ],
             },
             {
                 playerAmount: 2,
@@ -43,10 +53,20 @@ export const testMap = {
                 teamName: "§4RED",
                 players: [],
                 spawnPoints: [{ x: 73, y: 21, z: 15 }],
-                capturePoints: [{ startPosition: { x: 75, y: 8, z: 17 }, endPosition: { x: 71, y: 8, z: 13 } }],
+                capturePoints: [
+                    {
+                        startPosition: { x: 75, y: 8, z: 17 },
+                        endPosition: { x: 71, y: 8, z: 13 },
+                    },
+                ],
                 spawnBarrierBlockTypeID: "glass",
-                spawnBarriers: [{ startPosition: { x: 71, y: 20, z: 13 }, endPosition: { x: 73, y: 20, z: 17 } }]
+                spawnBarriers: [
+                    {
+                        startPosition: { x: 71, y: 20, z: 13 },
+                        endPosition: { x: 73, y: 20, z: 17 },
+                    },
+                ],
             },
-        ]
-    }
+        ],
+    },
 };
