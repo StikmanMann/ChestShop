@@ -39,11 +39,10 @@ const preloadMaps = async () => {
   for (const map of mapList) {
     Logger.warn(`Preloading Map: ${map.mapName}`);
     map.mapData.structures = await MapParser.createStructureArray(
-      map.mapData.structureId,
-      world.getDimension("overworld"),
-      map.mapData.startLocation,
-      map.mapData.endLocation
+      map.mapData,
+      world.getDimension("overworld")
     );
+    world.sendMessage(map.mapData.structureId);
   }
 };
 
@@ -51,5 +50,5 @@ system.run(async () => {
   await preloadMaps();
   await AwaitFunctions.waitTicks(10);
 
-  MapParser.loadMap(largeMap, { x: 1000, y: 50, z: 1000 }, world.getPlayers());
+  MapParser.loadMap(largeMap, { x: 1000, y: 0, z: 1000 }, world.getPlayers());
 });

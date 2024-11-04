@@ -4,7 +4,7 @@ import { GlobalVars } from "globalVars";
 import { Logger } from "staticScripts/Logger";
 import { AwaitFunctions } from "staticScripts/awaitFunctions";
 Player.prototype.setSpawnFunction = function (func) {
-    playerSpawnFunctionMap.set(this.id, func.bind(this));
+    playerSpawnFunctionMap.set(this.id, func);
 };
 /**
  * playerId: Function
@@ -15,7 +15,7 @@ export const normalSpawnFunction = (player) => {
     player.teleport(GlobalVars.spawn);
 };
 for (const player of world.getPlayers()) {
-    player.setSpawnFunction(normalSpawnFunction.bind(null, player));
+    player.setSpawnFunction(normalSpawnFunction);
 }
 world.afterEvents.playerSpawn.subscribe(async (eventData) => {
     const { initialSpawn, player } = eventData;
@@ -26,5 +26,5 @@ world.afterEvents.playerSpawn.subscribe(async (eventData) => {
         MapParser.removePlayerFromAllMaps(player);
     }
     await AwaitFunctions.waitTicks(1);
-    playerSpawnFunctionMap.get(player.id)();
+    playerSpawnFunctionMap.get(player.id)(player);
 });

@@ -27,7 +27,7 @@ GlobalVars.players = world.getAllPlayers();
 GlobalVars.overworld = world.getDimension("overworld");
 GlobalVars.nether = world.getDimension("nether");
 GlobalVars.theEnd = world.getDimension("the_end");
-GlobalVars.spawn = { x: 150, y: 65, z: 5 };
+GlobalVars.spawn = { x: 15, y: 300, z: 15 };
 world.afterEvents.playerSpawn.subscribe((eventData) => {
     GlobalVars.getPlayers();
 });

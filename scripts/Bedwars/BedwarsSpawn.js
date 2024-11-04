@@ -1,5 +1,5 @@
 import { GameMode } from "@minecraft/server";
-export const bedwarsSpawn = async (mapData, player) => {
+export const bedwarsSpawn = (mapData) => (player) => {
     player.setGameMode(GameMode.spectator);
     const bedwarsData = mapData.gameModeData;
     player.setGameMode(GameMode.survival);

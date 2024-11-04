@@ -43,8 +43,9 @@ world.beforeEvents.playerInteractWithEntity.subscribe((event) => {
     const shopInventory = shopEntity.getComponent(
       "minecraft:inventory"
     ).container;
+    //world.sendMessage(`${categories.has(shopEntity.nameTag)}`);
     loadPage(shopInventory, categories.get(shopEntity.nameTag), event.player);
-
+    world.sendMessage(`Opened ${shopEntity.nameTag} for ${event.player.name}`);
     const newShop = shopEntity.dimension.spawnEntity(
       shopEntity.typeId,
       shopEntity.location

@@ -39,7 +39,7 @@ class GlobalVars {
     this.players = world.getAllPlayers();
   }
 
-  static spawn = { x: 150, y: 65, z: 5 } as Vector3;
+  static spawn = { x: 15, y: 300, z: 15 } as Vector3;
 }
 
 world.afterEvents.playerSpawn.subscribe((eventData) => {

@@ -2,6 +2,7 @@ import { Entity, ItemStack, Player, world } from "@minecraft/server";
 import { buyItem } from "../BuyFunctions/StandardBuyFunction";
 import { showHUD } from "staticScripts/commandFunctions";
 import { ActionFormData } from "@minecraft/server-ui";
+import { mainShop } from "./MainShop";
 
 export interface Price {
   priceTypeId: string;
@@ -25,7 +26,7 @@ export interface Category {
 }
 
 export const categories: Map<string, Category> = new Map([
-  ["Main Shop", { name: "Main Shop", items: new Array<ShopItem>(27) }],
+  ["Main Shop", mainShop],
 ]);
 
 world.afterEvents.entitySpawn.subscribe(async (event) => {
@@ -33,15 +34,16 @@ world.afterEvents.entitySpawn.subscribe(async (event) => {
   if (entity.typeId !== "shop:villager_shop") {
     return;
   }
-  let player = entity.dimension.getPlayers({
+  let players = entity.dimension.getPlayers({
     closest: 1,
     maxDistance: 1,
     location: entity.location,
-  })[0];
-
-  if (!player) {
+  });
+  world.sendMessage(players.length.toString());
+  if (players.length == 0) {
     return;
   }
+  let player = players[0];
 
   let hud = new ActionFormData()
     .title("Set Chest Shop")

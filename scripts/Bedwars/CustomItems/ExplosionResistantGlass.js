@@ -64,6 +64,7 @@ world.beforeEvents.explosion.subscribe((eventData) => {
     firstBoom = true;
 });
 world.afterEvents.explosion.subscribe((eventData) => {
+    //if (!firstBoom) return;
     system.run(() => {
         for (const block of explosionResitantGlassBlocks) {
             eventData.dimension.setBlockType(block[0], block[1]);

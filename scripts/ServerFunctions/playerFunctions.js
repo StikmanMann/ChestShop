@@ -22,7 +22,8 @@ Player.prototype.awardWin = function () {
     this.setHypixelValue("Wins", this.getHypixelValue("Wins") + 1);
     this.setHypixelValue("winsCurrency", this.getHypixelValue("winsCurrency") + 1);
     this.setHypixelValue("Current Winstreak", this.getHypixelValue("Current Winstreak") + 1);
-    if (this.getHypixelValue("Current Winstreak") > this.getHypixelValue("Highest Winstreak")) {
+    if (this.getHypixelValue("Current Winstreak") >
+        this.getHypixelValue("Highest Winstreak")) {
         this.setHypixelValue("Highest Winstreak", this.getHypixelValue("Current Winstreak"));
     }
 };
@@ -40,24 +41,50 @@ Player.prototype.sendToHub = function () {
     this;
     this.runCommand("clear");
     MapParser.removePlayerFromAllMaps(this);
-    this.setSpawnFunction(normalSpawnFunction.bind(null, this));
+    this.setSpawnFunction(normalSpawnFunction);
     player.setHypixelValue("currentMatchID", -1);
     this.teleport(GlobalVars.spawn);
 };
 // Define an array containing the valid strings
-export const playerValueTypeArray = ["winsCurrency", "currentMatchID", "currentLobbyID"];
-export const publicStatsTypeArray = ["Wins", "Loses", "Kills", "Highest Winstreak", "Current Winstreak"];
+export const playerValueTypeArray = [
+    "winsCurrency",
+    "currentMatchID",
+    "currentLobbyID",
+];
+export const publicStatsTypeArray = [
+    "Wins",
+    "Loses",
+    "Kills",
+    "Highest Winstreak",
+    "Current Winstreak",
+];
 const showPlayerStats = (showHUDPlayer, getPlayer) => {
     Logger.log(`Showing Stats to ${showHUDPlayer.name} for ${getPlayer.name}`, "Hypixel");
     const playerStatsPanel = new ActionFormData();
     playerStatsPanel.title("Player Stats");
     let joinedString = "";
     for (const key of publicStatsTypeArray) {
-        joinedString += `§r${key}: §a${getPlayer.getHypixelValue(key).toString()}\n`;
+        joinedString += `§r${key}: §a${getPlayer
+            .getHypixelValue(key)
+            .toString()}\n`;
     }
     playerStatsPanel.body(joinedString);
     playerStatsPanel.button("Close");
     showHUD(showHUDPlayer, playerStatsPanel);
 };
-addCommand({ commandName: "stats", commandPrefix: ";;", directory: "hypixel", chatFunction: ((chatSendEvent) => { showPlayerStats(chatSendEvent.sender, chatSendEvent.sender); }), });
-addCommand({ commandName: "hub", commandPrefix: ";;", directory: "hypixel", chatFunction: ((chatSendEvent) => { chatSendEvent.sender.sendToHub(); }), });
+addCommand({
+    commandName: "stats",
+    commandPrefix: ";;",
+    directory: "hypixel",
+    chatFunction: (chatSendEvent) => {
+        showPlayerStats(chatSendEvent.sender, chatSendEvent.sender);
+    },
+});
+addCommand({
+    commandName: "hub",
+    commandPrefix: ";;",
+    directory: "hypixel",
+    chatFunction: (chatSendEvent) => {
+        chatSendEvent.sender.sendToHub();
+    },
+});

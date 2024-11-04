@@ -5,38 +5,37 @@ import { Logger } from "staticScripts/Logger";
 import { AwaitFunctions } from "staticScripts/awaitFunctions";
 
 declare module "@minecraft/server" {
-
-    interface Player {
-        setSpawnFunction(func: Function): void
-    }
+  interface Player {
+    setSpawnFunction(func: Function): void;
+  }
 }
 
-Player.prototype.setSpawnFunction = function (func: Function) {
-    playerSpawnFunctionMap.set(this.id, func.bind(this));
-}
+Player.prototype.setSpawnFunction = function (func: (Player) => void) {
+  playerSpawnFunctionMap.set(this.id, func);
+};
 
 /**
  * playerId: Function
  */
-const playerSpawnFunctionMap: Map<string, Function> = new Map();
+const playerSpawnFunctionMap: Map<string, (Player) => void> = new Map();
 
-export  const normalSpawnFunction = (player: Player) => {
-    Logger.log(`Teleporting ${player.name} to spawn`, "PlayerSpawnHandler");
-    player.teleport(GlobalVars.spawn);
-}
+export const normalSpawnFunction = (player: Player) => {
+  Logger.log(`Teleporting ${player.name} to spawn`, "PlayerSpawnHandler");
+  player.teleport(GlobalVars.spawn);
+};
 
-for(const player of world.getPlayers()){
-    player.setSpawnFunction(normalSpawnFunction.bind(null, player));
+for (const player of world.getPlayers()) {
+  player.setSpawnFunction(normalSpawnFunction);
 }
 
 world.afterEvents.playerSpawn.subscribe(async (eventData) => {
-    const { initialSpawn, player } = eventData;
-    if (initialSpawn) {
-        player.setSpawnFunction(normalSpawnFunction);
-        player.teleport(GlobalVars.spawn);
-        //Just in case the player somehow is still in a match
-        MapParser.removePlayerFromAllMaps(player);
-    }
-    await AwaitFunctions.waitTicks(1);
-    playerSpawnFunctionMap.get(player.id)();
-})
+  const { initialSpawn, player } = eventData;
+  if (initialSpawn) {
+    player.setSpawnFunction(normalSpawnFunction);
+    player.teleport(GlobalVars.spawn);
+    //Just in case the player somehow is still in a match
+    MapParser.removePlayerFromAllMaps(player);
+  }
+  await AwaitFunctions.waitTicks(1);
+  playerSpawnFunctionMap.get(player.id)(player);
+});

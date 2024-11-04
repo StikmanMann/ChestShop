@@ -22,6 +22,7 @@ export const getColoredWool = (player) => {
         return wool;
     }
     wool = new ItemStack(`minecraft:${color}_wool`);
+    wool.nameTag = `§r§f${color[0].toLocaleUpperCase() + color.slice(1)} Wool`;
     wool.amount = 16;
     wool.setLore(wool.getLore().concat(["§r§l§n4x Copper"]));
     if (specialWoolNameCase.has(color)) {

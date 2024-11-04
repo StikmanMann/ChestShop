@@ -2,7 +2,7 @@ import { GameMode, Player } from "@minecraft/server";
 import { IMapData } from "MapParser/loadMap";
 import { IBedwarsData } from "./BedwarsMain";
 
-export const bedwarsSpawn = async (mapData: IMapData, player: Player) => {
+export const bedwarsSpawn = (mapData: IMapData) => (player: Player) => {
   player.setGameMode(GameMode.spectator);
   const bedwarsData = mapData.gameModeData as IBedwarsData;
   player.setGameMode(GameMode.survival);

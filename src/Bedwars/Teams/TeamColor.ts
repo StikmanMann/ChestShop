@@ -3,7 +3,7 @@ import { GlobalVars } from "globalVars";
 import { addCommand } from "staticScripts/commandFunctions";
 import { TickFunctions } from "staticScripts/tickFunctions";
 
-type TeamColorType = {
+export type TeamColorType = {
   red: string;
   blue: string;
   green: string;
