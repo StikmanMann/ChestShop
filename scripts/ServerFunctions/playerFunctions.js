@@ -28,11 +28,11 @@ Player.prototype.awardWin = function () {
     }
 };
 Player.prototype.awardDraw = function () {
-    Logger.warn(`Awarding Draw to ${this.name} aka ${this.nameTag}`, "Hypixel");
+    Logger.warn(`Awarding Draw to ${this.name} aka ${this.nameTag}`, "Server");
     //this.setHypixelValue("Current Winstreak", 0);
 };
 Player.prototype.awardLoss = function () {
-    Logger.warn(`Awarding Lose to ${this.name} aka ${this.nameTag}`, "Hypixel");
+    Logger.warn(`Awarding Lose to ${this.name} aka ${this.nameTag}`, "Server");
     this.setHypixelValue("Loses", this.getHypixelValue("Loses") + 1);
     this.setHypixelValue("Current Winstreak", 0);
 };

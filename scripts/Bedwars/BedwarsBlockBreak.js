@@ -1,7 +1,11 @@
 import { system, world, } from "@minecraft/server";
 import { VectorFunctions } from "staticScripts/vectorFunctions";
 import { AwaitFunctions } from "staticScripts/awaitFunctions";
+import { bedwarsBedlessSpawn } from "./BedwarsSpawn";
 export const bedwarsBlockBreak = (data) => (eventData) => {
+    if (eventData.block.typeId.includes("bed")) {
+        return;
+    }
     if (!data.players.includes(eventData.player)) {
         return;
     }
@@ -34,6 +38,23 @@ export const bedwarsBlockBreak = (data) => (eventData) => {
                 }
             }
         });
+    }
+};
+export const bedwarsBlockBreakAfter = (data) => (eventdata) => {
+    if (eventdata.brokenBlockPermutation.type.id.includes("bed")) {
+        let brokenLocation = eventdata.block.location;
+        let bedwarsData = data.gameModeData;
+        for (const team of bedwarsData.teams) {
+            if (VectorFunctions.vectorLengthXZ(VectorFunctions.subtractVector(brokenLocation, team.bedLocation)) < 2) {
+                for (const player of data.players) {
+                    player.sendMessage(`§l${team.teamName} » §r§cBed Destroyed!`);
+                }
+                for (const player of team.players) {
+                    player.onScreenDisplay.setTitle(`§cBed Destroyed!`);
+                    player.setSpawnFunction(bedwarsBedlessSpawn(data));
+                }
+            }
+        }
     }
 };
 export const bedwarsPlayerPlace = (data) => (eventData) => {

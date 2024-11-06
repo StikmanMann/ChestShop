@@ -13,3 +13,7 @@ export const bedwarsSpawn = (mapData) => (player) => {
         }
     }
 };
+export const bedwarsBedlessSpawn = (mapData) => (player) => {
+    player.awardLoss();
+    player.sendToHub();
+};

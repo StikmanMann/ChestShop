@@ -1,5 +1,6 @@
 //Pre load
 //Map Data
+import "Bedwars/Generators/GeneratorLevels";
 import "MapParser/Bridge Maps/brideMaps";
 //Player Functions
 import "hypixelFunctions/playerFunctions";

@@ -6,6 +6,7 @@ import {
   InvalidStructureError,
   Player,
   Structure,
+  StructureAnimationMode,
   StructureManager,
   StructureSaveMode,
   Vector3,
@@ -114,7 +115,7 @@ export class MapParser {
     mapId: EMapList,
     offset: Vector3,
     Players: Player[]
-  ) => {};
+  ) => { };
 
   static loadMap = async (
     mapData: IMapData,
@@ -197,10 +198,11 @@ export class MapParser {
     //load game mode data
     switch (mapDataCopy.gameMode) {
       case EGameMode.BRIDGE:
-        bridgeStart(mapDataCopy, offset);
+        bridgeStart(mapDataCopy as IMapData<EGameMode.BRIDGE>, offset);
         break;
       case EGameMode.BEDWARS:
-        bedwarsStart(mapDataCopy, offset);
+        bedwarsStart(mapDataCopy as IMapData<EGameMode.BEDWARS>, offset);
+        break;
     }
 
     mapDataCopy.mapId = findIndex;
@@ -304,9 +306,19 @@ export class MapParser {
     );
     let savedLocation = structures[structures.length - 1].startPosition;
     Logger.warn("Removing all entities", "MapParser");
-    for(const entity of GlobalVars.getAllEntities({location: offset, excludeTypes: ["minecraft:player"], volume: {x: structures[structures.length - 1].startPosition.x + 63, y: structures[structures.length - 1].startPosition.y + 255, z: structures[structures.length - 1].startPosition.z + 63}})){ {
-          entity.remove();
-          }
+    for (const entity of GlobalVars.getAllEntities(
+      {
+        location: offset,
+        excludeTypes: ["minecraft:player"],
+        volume: {
+          x: structures[structures.length - 1].startPosition.x + 63,
+          y: structures[structures.length - 1].startPosition.y + 255, z: structures[structures.length - 1].startPosition.z + 63
+        }
+      })) {
+
+      entity.remove();
+
+    }
     structures[structures.length - 1].startPosition = savedLocation;
     for (const structure of structures) {
       Logger.warn(
@@ -335,11 +347,12 @@ export class MapParser {
             new BlockVolume(structure.startPosition, structure.startPosition),
             "air"
           );
-          
+
           world.structureManager.place(
             structure.structureSaveId,
             dimension,
-            structure.startPosition
+            structure.startPosition,
+
           );
           dimension.runCommandAsync(
             `tickingarea remove ${structure.structureSaveId}`
@@ -353,8 +366,9 @@ export class MapParser {
           );
         }
       }
-    }
-  };
+
+    };
+  }
   /**
    *
    * @returns
@@ -388,8 +402,7 @@ export class MapParser {
       const endZ = endLocation.z;
 
       dimension.runCommandAsync(
-        `tickingarea add circle  ${(startX + endX) / 2} ${startY} ${
-          (startZ + endZ) / 2
+        `tickingarea add circle  ${(startX + endX) / 2} ${startY} ${(startZ + endZ) / 2
         } 4 center${structureId} true`
       );
 
@@ -414,10 +427,8 @@ export class MapParser {
             dimension.runCommandAsync(`tickingarea remove first${structureId}`);
             await AwaitFunctions.waitTicks(1);
             dimension.runCommandAsync(
-              `tickingarea add  ${currentStart.x} ${currentStart.y} ${
-                currentStart.z
-              } ${currentStart.x + maxBlockSize} ${currentEnd.y} ${
-                currentEnd.z
+              `tickingarea add  ${currentStart.x} ${currentStart.y} ${currentStart.z
+              } ${currentStart.x + maxBlockSize} ${currentEnd.y} ${currentEnd.z
               } first${structureId} true`
             );
 
@@ -453,7 +464,7 @@ export class MapParser {
                 dimension.runCommandAsync(
                   `tickingarea remove second${structureId}`
                 );
-
+  
                 dimension.runCommandAsync(
                   `tickingarea add  ${currentStart.x} ${currentStart.y} ${
                     currentStart.z

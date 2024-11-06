@@ -2,7 +2,9 @@ import { Player, world, system } from "@minecraft/server";
 
 //Pre load
 //Map Data
+import "Bedwars/Generators/GeneratorLevels";
 import "MapParser/Bridge Maps/brideMaps";
+
 
 //Player Functions
 import "hypixelFunctions/playerFunctions";

@@ -99,6 +99,7 @@ MapParser.loadMap = async (mapData, offset, players) => {
             break;
         case EGameMode.BEDWARS:
             bedwarsStart(mapDataCopy, offset);
+            break;
     }
     mapDataCopy.mapId = findIndex;
     //Save the map
@@ -166,43 +167,41 @@ MapParser.placeStructureArray = async (structures, dimension, offset, players) =
     let structureRoot = VectorFunctions.subtractVector(structures[0].startPosition, offset);
     let savedLocation = structures[structures.length - 1].startPosition;
     Logger.warn("Removing all entities", "MapParser");
-    for (const entity of GlobalVars.getAllEntities({ location: offset, excludeTypes: ["minecraft:player"], volume: { x: structures[structures.length - 1].startPosition.x + 63, y: structures[structures.length - 1].startPosition.y + 255, z: structures[structures.length - 1].startPosition.z + 63 } })) {
-        {
-            entity.remove();
+    for (const entity of GlobalVars.getAllEntities({
+        location: offset,
+        excludeTypes: ["minecraft:player"],
+        volume: {
+            x: structures[structures.length - 1].startPosition.x + 63,
+            y: structures[structures.length - 1].startPosition.y + 255, z: structures[structures.length - 1].startPosition.z + 63
         }
-        structures[structures.length - 1].startPosition = savedLocation;
-        for (const structure of structures) {
-            Logger.warn(`Placing Preloaded ${structure.structureSaveId} at ${structure.startPosition.x} ${structure.startPosition.y} ${structure.startPosition.z}`, "MapParser");
-            //make sure it fits in world height
-            structure.startPosition = VectorFunctions.subtractVector(structure.startPosition, structureRoot);
-            let chunkLoaded = false;
-            while (!chunkLoaded) {
-                dimension.runCommandAsync(`tickingarea add circle ${structure.startPosition.x} ${structure.startPosition.y} ${structure.startPosition.z} 2 ${structure.structureSaveId} true`);
-                //world.sendMessage("Teleporting");
-                players[0].teleport(structure.startPosition);
-                await AwaitFunctions.waitTicks(1);
-                try {
-                    //To see if the chunks are loaded
-                    dimension.fillBlocks(new BlockVolume(structure.startPosition, structure.startPosition), "air");
-                    world.structureManager.place(structure.structureSaveId, dimension, structure.startPosition);
-                    dimension.runCommandAsync(`tickingarea remove ${structure.structureSaveId}`);
-                    chunkLoaded = true;
-                }
-                catch (e) {
-                    Logger.warn(e);
-                    Logger.warn("Failed to place structure trying again in 1 ticks", "MapParser");
-                }
+    })) {
+        entity.remove();
+    }
+    structures[structures.length - 1].startPosition = savedLocation;
+    for (const structure of structures) {
+        Logger.warn(`Placing Preloaded ${structure.structureSaveId} at ${structure.startPosition.x} ${structure.startPosition.y} ${structure.startPosition.z}`, "MapParser");
+        //make sure it fits in world height
+        structure.startPosition = VectorFunctions.subtractVector(structure.startPosition, structureRoot);
+        let chunkLoaded = false;
+        while (!chunkLoaded) {
+            dimension.runCommandAsync(`tickingarea add circle ${structure.startPosition.x} ${structure.startPosition.y} ${structure.startPosition.z} 2 ${structure.structureSaveId} true`);
+            //world.sendMessage("Teleporting");
+            players[0].teleport(structure.startPosition);
+            await AwaitFunctions.waitTicks(1);
+            try {
+                //To see if the chunks are loaded
+                dimension.fillBlocks(new BlockVolume(structure.startPosition, structure.startPosition), "air");
+                world.structureManager.place(structure.structureSaveId, dimension, structure.startPosition);
+                dimension.runCommandAsync(`tickingarea remove ${structure.structureSaveId}`);
+                chunkLoaded = true;
+            }
+            catch (e) {
+                Logger.warn(e);
+                Logger.warn("Failed to place structure trying again in 1 ticks", "MapParser");
             }
         }
     }
     ;
-    /**
-     *
-     * @returns
-     *
-     * @todo
-     * I am scared this breaks for very large maps, but it works for bedwars sized maps for sure
-     */
 };
 /**
  *
@@ -272,7 +271,7 @@ MapParser.createStructureArray = async (mapData, dimension) => {
                             dimension.runCommandAsync(
                               `tickingarea remove second${structureId}`
                             );
-            
+              
                             dimension.runCommandAsync(
                               `tickingarea add  ${currentStart.x} ${currentStart.y} ${
                                 currentStart.z
