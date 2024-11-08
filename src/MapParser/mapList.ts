@@ -4,7 +4,7 @@ import { EGameMode, IMapData, MapParser } from "./loadMap";
 import { Logger } from "staticScripts/Logger";
 import { AwaitFunctions } from "staticScripts/awaitFunctions";
 import { choosePlayer } from "hud";
-import { largeMap } from "./BedwarsMaps/BedwarsMaps";
+import { largeMap } from "./BedwarsMaps/BedwarsMapsFunctions";
 
 // mapDefinitions.ts
 export enum EMapList {

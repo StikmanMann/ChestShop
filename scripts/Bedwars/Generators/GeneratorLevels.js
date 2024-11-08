@@ -15,8 +15,8 @@ GeneratorLevels.level1lapis = () => {
 };
 GeneratorLevels.level1team = () => {
     return {
-        itemNames: ["copper_ingot"],
-        itemSpawnRate: new Map([["copper_ingot", 5]]),
+        itemNames: ["copper_ingot", "iron_ingot"],
+        itemSpawnRate: new Map([["copper_ingot", 5], ["iron_ingot", 20]]),
     };
 };
 world.sendMessage(`${GeneratorLevels.level1diamond().itemSpawnRate.get("diamond")}`);

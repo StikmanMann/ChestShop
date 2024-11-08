@@ -13,7 +13,7 @@ import {
   world,
 } from "@minecraft/server";
 import { EGameMode, IMapData, MapParser } from "MapParser/loadMap";
-import { largeMap } from "MapParser/BedwarsMaps/BedwarsMaps";
+
 import { TeamColorType } from "./Teams/TeamColor";
 import { LinkedList } from "dataTypes/linkedList";
 
@@ -38,6 +38,12 @@ export interface IBedwarsData {
   bedwarsBlockBreakAfter: (data: IMapData<EGameMode.BEDWARS>) => (eventData: PlayerBreakBlockAfterEvent) => void;
 
   teams: {
+    stats: {
+      bedsDestroyed?: number;
+    }
+    status: {
+      bedDestroyed?: boolean;
+    }
     generatorLevel: number;
     generatorLevels: (() => IGeneratorLevel<any>)[];
     teamName: string;

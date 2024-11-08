@@ -53,6 +53,16 @@ export const bedwarsBlockBreakAfter = (data) => (eventdata) => {
                     player.onScreenDisplay.setTitle(`§cBed Destroyed!`);
                     player.setSpawnFunction(bedwarsBedlessSpawn(data));
                 }
+                team.status.bedDestroyed = true;
+            }
+        }
+        //await AwaitFunctions.waitTicks(5);
+        let droppedItem = eventdata.block.dimension.getEntities({ type: "item", maxDistance: 5, location: eventdata.block.location });
+        //world.sendMessage(`${droppedItem.length} items dropped`);
+        for (const item of droppedItem) {
+            //world.sendMessage(`Item: ${item.getComponent("item").itemStack.typeId}`);
+            if (item.getComponent("item").itemStack.typeId.includes("bed")) {
+                item.remove();
             }
         }
     }

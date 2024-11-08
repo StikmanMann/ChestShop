@@ -6,6 +6,7 @@ import {
 } from "Bedwars/BedwarsBlockBreak";
 import { IBedwarsData, IGeneratorLevel } from "Bedwars/BedwarsMain";
 import { bedwarsSpawn } from "Bedwars/BedwarsSpawn";
+import { drawBedwarsActionbar } from "Bedwars/BedwarsVisuals";
 import { GeneratorLevels } from "Bedwars/Generators/GeneratorLevels";
 import { BedwarsTeam } from "Bedwars/Teams/TeamColor";
 import { LinkedList } from "dataTypes/linkedList";
@@ -78,8 +79,7 @@ export const bedwarsStart = async (
       VectorFunctions.addVector(team.bedLocation, offset),
       mapData.startLocation
     );
-
-
+    team.status.bedDestroyed = false;
 
 
 
@@ -93,12 +93,17 @@ export const bedwarsStart = async (
       team.players.push(player);
       player.teleport(team.spawnPoints[i % team.spawnPoints.length]);
       BedwarsTeam.setPlayerColor(player, team.teamColor);
+      player.setAxeLevel(0)
+      player.setPickaxeLevel(0)
+      player.setArmorLevel(0)
+      player.setShearsStauts(0)
+      player.givePlayerKit()
     }
-    /*     //If no players are in the team, remove the bed
-        
-        if (team.players.length === 0) {
-          GlobalVars.overworld.setBlockType(team.bedLocation, "air");
-        } */
+    //If no players are in the team, remove the bed
+
+    if (team.players.length === 0) {
+      team.status.bedDestroyed = true
+    }
 
   }
 
@@ -127,9 +132,11 @@ export const bedwarsStart = async (
 
 export const bedwarsUnload = async (mapData: IMapData) => { };
 
-const bedwarsTick = (mapData: IMapData) => () => {
+const bedwarsTick = (mapData: IMapData<EGameMode.BEDWARS>) => () => {
   let bedwarsData = mapData.gameModeData as IBedwarsData;
   bedwarsData.currentTick++;
+
+  drawBedwarsActionbar(mapData);
   //world.sendMessage(`Current tick: ${bedwarsData.currentTick}`);
   //Map generators
 
@@ -303,6 +310,8 @@ export const largeMap: IMapData<EGameMode.BEDWARS> = {
     playerPlacedBlockLocations: new Set(),
     teams: [
       {
+        stats: {},
+        status: {},
         generatorLevel: 0,
         generatorLevels: [GeneratorLevels.level1team],
         playerAmount: 1,
@@ -314,6 +323,8 @@ export const largeMap: IMapData<EGameMode.BEDWARS> = {
         generator: { x: 40, y: 274, z: 91 },
       },
       {
+        stats: {},
+        status: {},
         generatorLevel: 0,
         generatorLevels: [GeneratorLevels.level1team],
         playerAmount: 1,
@@ -325,6 +336,8 @@ export const largeMap: IMapData<EGameMode.BEDWARS> = {
         generator: { x: 91, y: 274, z: 40 },
       },
       {
+        stats: {},
+        status: {},
         generatorLevel: 0,
         generatorLevels: [GeneratorLevels.level1team],
         playerAmount: 1,
@@ -336,6 +349,8 @@ export const largeMap: IMapData<EGameMode.BEDWARS> = {
         generator: { x: 91, y: 278, z: -40 },
       },
       {
+        stats: {},
+        status: {},
         generatorLevel: 0,
         generatorLevels: [GeneratorLevels.level1team],
         playerAmount: 1,
@@ -347,6 +362,8 @@ export const largeMap: IMapData<EGameMode.BEDWARS> = {
         generator: { x: 40, y: 278, z: -91 },
       },
       {
+        stats: {},
+        status: {},
         generatorLevel: 0,
         generatorLevels: [GeneratorLevels.level1team],
         playerAmount: 1,
@@ -358,6 +375,8 @@ export const largeMap: IMapData<EGameMode.BEDWARS> = {
         generator: { x: -40, y: 274, z: -91 },
       },
       {
+        stats: {},
+        status: {},
         generatorLevel: 0,
         generatorLevels: [GeneratorLevels.level1team],
         playerAmount: 1,
@@ -369,6 +388,8 @@ export const largeMap: IMapData<EGameMode.BEDWARS> = {
         generator: { x: -91, y: 274, z: -40 },
       },
       {
+        stats: {},
+        status: {},
         generatorLevel: 0,
         generatorLevels: [GeneratorLevels.level1team],
         playerAmount: 1,
@@ -380,6 +401,8 @@ export const largeMap: IMapData<EGameMode.BEDWARS> = {
         generator: { x: -91, y: 278, z: 40 },
       },
       {
+        stats: {},
+        status: {},
         generatorLevel: 0,
         generatorLevels: [GeneratorLevels.level1team],
         playerAmount: 1,

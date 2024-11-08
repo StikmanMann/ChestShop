@@ -2,7 +2,7 @@ import { system, world } from "@minecraft/server";
 import { EGameMode, MapParser } from "./loadMap";
 import { Logger } from "staticScripts/Logger";
 import { AwaitFunctions } from "staticScripts/awaitFunctions";
-import { largeMap } from "./BedwarsMaps/BedwarsMaps";
+import { largeMap } from "./BedwarsMaps/BedwarsMapsFunctions";
 // mapDefinitions.ts
 export var EMapList;
 (function (EMapList) {

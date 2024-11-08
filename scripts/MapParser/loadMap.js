@@ -6,7 +6,7 @@ import { Logger } from "staticScripts/Logger";
 import { AwaitFunctions } from "staticScripts/awaitFunctions";
 import { TickFunctions } from "staticScripts/tickFunctions";
 import { VectorFunctions } from "staticScripts/vectorFunctions";
-import { bedwarsStart } from "./BedwarsMaps/BedwarsMaps";
+import { bedwarsStart } from "./BedwarsMaps/BedwarsMapsFunctions";
 function deepCopy(obj) {
     // Check if the value is an object or function, otherwise return it directly
     if (obj === null || typeof obj !== "object") {

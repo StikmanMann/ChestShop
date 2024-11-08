@@ -22,16 +22,6 @@ const teamColorToBlock = new Map([
     ["black", "black"],
     ["white", "white"],
 ]);
-const teamColorNames = new Map([
-    ["red", "§c"],
-    ["blue", "§9"],
-    ["green", "§a"],
-    ["yellow", "§e"],
-    ["pink", "§d"],
-    ["purple", "§5"],
-    ["black", "§8"],
-    ["white", "§f"],
-]);
 system.run(() => {
     for (const player of world.getPlayers()) {
         player.nameTag = player.name;
@@ -52,7 +42,8 @@ export class BedwarsTeam {
             }
             name = name.slice(index + 2);
         }
-        const newName = `§l${teamColorNames.get(color)}${name}`;
+        // Cast color to keyof TeamColorType to fix type error
+        const newName = `§l${BedwarsTeam.teamColorNames.get(color)}${name}`;
         player.nameTag = newName;
         world.sendMessage("New Name: " + newName);
     }
@@ -68,6 +59,16 @@ export class BedwarsTeam {
         return validColors.includes(color);
     }
 }
+BedwarsTeam.teamColorNames = new Map([
+    ["red", "§c"],
+    ["blue", "§9"],
+    ["green", "§a"],
+    ["yellow", "§e"],
+    ["pink", "§d"],
+    ["purple", "§5"],
+    ["black", "§8"],
+    ["white", "§f"],
+]);
 world.afterEvents.playerSpawn.subscribe((eventData) => {
     BedwarsTeam.setPlayerNameTag(eventData.player);
 });

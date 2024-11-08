@@ -36,16 +36,6 @@ const teamColorToBlock: Map<string, string> = new Map([
   ["white", "white"],
 ]);
 
-const teamColorNames: Map<string, string> = new Map([
-  ["red", "§c"],
-  ["blue", "§9"],
-  ["green", "§a"],
-  ["yellow", "§e"],
-  ["pink", "§d"],
-  ["purple", "§5"],
-  ["black", "§8"],
-  ["white", "§f"],
-]);
 
 system.run(() => {
   for (const player of world.getPlayers()) {
@@ -54,6 +44,17 @@ system.run(() => {
 });
 
 export class BedwarsTeam {
+  static teamColorNames: Map<keyof TeamColorType, string> = new Map([
+    ["red", "§c"],
+    ["blue", "§9"],
+    ["green", "§a"],
+    ["yellow", "§e"],
+    ["pink", "§d"],
+    ["purple", "§5"],
+    ["black", "§8"],
+    ["white", "§f"],
+  ]);
+
   static setPlayerColor(player: Player, color: keyof TeamColorType) {
     player.setDynamicProperty("color", color);
     this.setPlayerNameTag(player);
@@ -69,7 +70,8 @@ export class BedwarsTeam {
       }
       name = name.slice(index + 2);
     }
-    const newName = `§l${teamColorNames.get(color)}${name}`;
+    // Cast color to keyof TeamColorType to fix type error
+    const newName = `§l${BedwarsTeam.teamColorNames.get(color as keyof TeamColorType)}${name}`;
     player.nameTag = newName;
     world.sendMessage("New Name: " + newName);
   }

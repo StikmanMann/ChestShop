@@ -30,7 +30,7 @@ import { VectorFunctions } from "staticScripts/vectorFunctions";
 import { testMap } from "./Bridge Maps/brideMaps";
 import { EMapList, mapList } from "./mapList";
 import { IBedwarsData } from "Bedwars/BedwarsMain";
-import { bedwarsStart } from "./BedwarsMaps/BedwarsMaps";
+import { bedwarsStart } from "./BedwarsMaps/BedwarsMapsFunctions";
 import { off } from "process";
 
 function deepCopy(obj: any) {

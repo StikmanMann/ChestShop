@@ -16,10 +16,10 @@ export class GeneratorLevels {
         };
     }
 
-    static readonly level1team = (): IGeneratorLevel<["copper_ingot"]> => {
+    static readonly level1team = (): IGeneratorLevel<["copper_ingot", "iron_ingot"]> => {
         return {
-            itemNames: ["copper_ingot"] as const,
-            itemSpawnRate: new Map([["copper_ingot", 5]]),
+            itemNames: ["copper_ingot", "iron_ingot"] as const,
+            itemSpawnRate: new Map([["copper_ingot", 5], ["iron_ingot", 20]]),
         };
     }
 }
