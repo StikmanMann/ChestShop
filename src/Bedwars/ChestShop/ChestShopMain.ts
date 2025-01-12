@@ -1,6 +1,7 @@
 import {
   BlockPermutation,
   Container,
+  Entity,
   ItemStack,
   Player,
   system,
@@ -31,6 +32,8 @@ system.run(() => {
   }
 });
 
+let activeShops: Array<Entity> = []
+
 world.beforeEvents.playerInteractWithEntity.subscribe((event) => {
   system.run(async () => {
     const shopEntity = event.target;
@@ -39,7 +42,7 @@ world.beforeEvents.playerInteractWithEntity.subscribe((event) => {
       world.sendMessage("Not a shop!");
       return;
     }
-
+    activeShops.push(shopEntity)
     const shopInventory = shopEntity.getComponent(
       "minecraft:inventory"
     ).container;
@@ -66,7 +69,7 @@ world.beforeEvents.playerInteractWithEntity.subscribe((event) => {
     });
 
     //remove old used villagers by same player
-    for (const entity of GlobalVars.getAllEntities({ tags: ["used"] })) {
+    for (const entity of activeShops) {
       const usedBy = entity.getDynamicProperty("buyer");
       if (usedBy === event.player.nameTag) {
         Logger.log(`Removing old shop for ${usedBy}`);
@@ -123,9 +126,7 @@ const deleteGroundItems = () => {
 TickFunctions.addFunction(deleteGroundItems, 2);
 
 const checkShopsForBuy = () => {
-  for (const shopEntity of GlobalVars.getAllEntities({
-    type: "shop:villager_shop",
-  })) {
+  for (const shopEntity of activeShops) {
     if (!shopEntity.hasTag("used")) {
       continue;
     }
@@ -140,8 +141,9 @@ const checkShopsForBuy = () => {
       Math.abs(buyer.location.x - shopEntity.location.x) > 5 ||
       Math.abs(buyer.location.z - shopEntity.location.z) > 5
     ) {
-      Logger.log(`Removing Shop for ${shopEntity.getDynamicProperty("buyer")}`);
+      Logger.warn(`Removing Shop for ${shopEntity.getDynamicProperty("buyer")}`);
       shopEntity.remove();
+      activeShops = activeShops.filter((shop) => shop !== shopEntity);
       continue;
     }
 

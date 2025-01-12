@@ -9,6 +9,7 @@ import {
   StructureAnimationMode,
   StructureManager,
   StructureSaveMode,
+  TicksPerSecond,
   Vector3,
   system,
   world,
@@ -115,7 +116,7 @@ export class MapParser {
     mapId: EMapList,
     offset: Vector3,
     Players: Player[]
-  ) => { };
+  ) => {};
 
   static loadMap = async (
     mapData: IMapData,
@@ -306,21 +307,20 @@ export class MapParser {
     );
     let savedLocation = structures[structures.length - 1].startPosition;
     Logger.warn("Removing all entities", "MapParser");
-    for (const entity of GlobalVars.getAllEntities(
-      {
-        location: offset,
-        excludeTypes: ["minecraft:player"],
-        volume: {
-          x: structures[structures.length - 1].startPosition.x + 63,
-          y: structures[structures.length - 1].startPosition.y + 255, z: structures[structures.length - 1].startPosition.z + 63
-        }
-      })) {
-
+    for (const entity of GlobalVars.getAllEntities({
+      location: offset,
+      excludeTypes: ["minecraft:player"],
+      volume: {
+        x: structures[structures.length - 1].startPosition.x + 63,
+        y: structures[structures.length - 1].startPosition.y + 255,
+        z: structures[structures.length - 1].startPosition.z + 63,
+      },
+    })) {
       entity.remove();
-
     }
     structures[structures.length - 1].startPosition = savedLocation;
     for (const structure of structures) {
+      players[0].addEffect("blindness", 100);
       Logger.warn(
         `Placing Preloaded ${structure.structureSaveId} at ${structure.startPosition.x} ${structure.startPosition.y} ${structure.startPosition.z}`,
         "MapParser"
@@ -339,7 +339,9 @@ export class MapParser {
           `tickingarea add circle ${structure.startPosition.x} ${structure.startPosition.y} ${structure.startPosition.z} 2 ${structure.structureSaveId} true`
         );
         //world.sendMessage("Teleporting");
+        players[0].addEffect("blindness", 100);
         players[0].teleport(structure.startPosition);
+
         await AwaitFunctions.waitTicks(1);
         try {
           //To see if the chunks are loaded
@@ -351,8 +353,7 @@ export class MapParser {
           world.structureManager.place(
             structure.structureSaveId,
             dimension,
-            structure.startPosition,
-
+            structure.startPosition
           );
           dimension.runCommandAsync(
             `tickingarea remove ${structure.structureSaveId}`
@@ -366,9 +367,8 @@ export class MapParser {
           );
         }
       }
-
-    };
-  }
+    }
+  };
   /**
    *
    * @returns
@@ -402,7 +402,8 @@ export class MapParser {
       const endZ = endLocation.z;
 
       dimension.runCommandAsync(
-        `tickingarea add circle  ${(startX + endX) / 2} ${startY} ${(startZ + endZ) / 2
+        `tickingarea add circle  ${(startX + endX) / 2} ${startY} ${
+          (startZ + endZ) / 2
         } 4 center${structureId} true`
       );
 
@@ -427,8 +428,10 @@ export class MapParser {
             dimension.runCommandAsync(`tickingarea remove first${structureId}`);
             await AwaitFunctions.waitTicks(1);
             dimension.runCommandAsync(
-              `tickingarea add  ${currentStart.x} ${currentStart.y} ${currentStart.z
-              } ${currentStart.x + maxBlockSize} ${currentEnd.y} ${currentEnd.z
+              `tickingarea add  ${currentStart.x} ${currentStart.y} ${
+                currentStart.z
+              } ${currentStart.x + maxBlockSize} ${currentEnd.y} ${
+                currentEnd.z
               } first${structureId} true`
             );
 

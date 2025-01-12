@@ -172,13 +172,15 @@ MapParser.placeStructureArray = async (structures, dimension, offset, players) =
         excludeTypes: ["minecraft:player"],
         volume: {
             x: structures[structures.length - 1].startPosition.x + 63,
-            y: structures[structures.length - 1].startPosition.y + 255, z: structures[structures.length - 1].startPosition.z + 63
-        }
+            y: structures[structures.length - 1].startPosition.y + 255,
+            z: structures[structures.length - 1].startPosition.z + 63,
+        },
     })) {
         entity.remove();
     }
     structures[structures.length - 1].startPosition = savedLocation;
     for (const structure of structures) {
+        players[0].addEffect("blindness", 100);
         Logger.warn(`Placing Preloaded ${structure.structureSaveId} at ${structure.startPosition.x} ${structure.startPosition.y} ${structure.startPosition.z}`, "MapParser");
         //make sure it fits in world height
         structure.startPosition = VectorFunctions.subtractVector(structure.startPosition, structureRoot);
@@ -186,6 +188,7 @@ MapParser.placeStructureArray = async (structures, dimension, offset, players) =
         while (!chunkLoaded) {
             dimension.runCommandAsync(`tickingarea add circle ${structure.startPosition.x} ${structure.startPosition.y} ${structure.startPosition.z} 2 ${structure.structureSaveId} true`);
             //world.sendMessage("Teleporting");
+            players[0].addEffect("blindness", 100);
             players[0].teleport(structure.startPosition);
             await AwaitFunctions.waitTicks(1);
             try {
@@ -201,7 +204,6 @@ MapParser.placeStructureArray = async (structures, dimension, offset, players) =
             }
         }
     }
-    ;
 };
 /**
  *
